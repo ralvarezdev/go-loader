@@ -1,6 +1,7 @@
 package filesystem
 
 import (
+	"fmt"
 	"os"
 )
 
@@ -8,7 +9,7 @@ import (
 func ReadFile(path string) ([]byte, error) {
 	file, err := os.ReadFile(path)
 	if err != nil {
-		return nil, UnableToReadFileError
+		return nil, fmt.Errorf(UnableToReadFileError, err)
 	}
 	return file, nil
 }
