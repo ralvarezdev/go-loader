@@ -25,7 +25,9 @@ func NewLogger(logger gologger.Logger) (*Logger, error) {
 func (l *Logger) LoadedTokenSource(tokenSource *oauth.TokenSource) {
 	// Check if the token source is nil
 	if tokenSource == nil {
-		l.logger.LogError(gologger.NewLogError("failed to load token source", nil, NilTokenSourceError))
+		l.logger.LogError(gologger.NewLogError("failed to load token source", nil,
+			ErrNilTokenSource
+		))
 		return
 	}
 

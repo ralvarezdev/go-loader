@@ -12,7 +12,7 @@ import (
 func LoadGoogleCredentials(ctx context.Context) (*google.Credentials, error) {
 	credentials, err := google.FindDefaultCredentials(ctx)
 	if err != nil {
-		return nil, FailedToLoadGoogleCredentialsError
+		return nil, ErrFailedToLoadGoogleCredentials
 	}
 	return credentials, nil
 }
@@ -23,7 +23,7 @@ func LoadServiceAccountCredentials(
 ) (*oauth.TokenSource, error) {
 	// Check if the credentials are nil
 	if credentials == nil {
-		return nil, NilGoogleCredentialsError
+		return nil, ErrNilGoogleCredentials
 	}
 
 	// Create a new token source
@@ -33,7 +33,7 @@ func LoadServiceAccountCredentials(
 		option.WithCredentials(credentials),
 	)
 	if err != nil {
-		return nil, FailedToCreateTokenSourceError
+		return nil, ErrFailedToCreateTokenSource
 	}
 
 	return &oauth.TokenSource{TokenSource: tokenSource}, nil

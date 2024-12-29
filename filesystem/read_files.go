@@ -9,7 +9,7 @@ import (
 func ReadFile(path string) ([]byte, error) {
 	file, err := os.ReadFile(path)
 	if err != nil {
-		return nil, fmt.Errorf(UnableToReadFileError, err)
+		return nil, fmt.Errorf(ErrUnableToReadFile, err)
 	}
 	return file, nil
 }

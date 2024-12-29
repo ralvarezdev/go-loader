@@ -22,7 +22,7 @@ func LoadTLSCredentials(pemServerCAPath string) (
 
 	// Append the certificates from the PEM file
 	if !certPool.AppendCertsFromPEM(pemServerCA) {
-		return nil, FailedToAddCAPemError
+		return nil, ErrFailedToAddCAPem
 	}
 
 	// Create the credentials and return it
@@ -37,7 +37,7 @@ func LoadSystemCredentials() (credentials.TransportCredentials, error) {
 	// Load the system cert pool
 	systemRoots, err := x509.SystemCertPool()
 	if err != nil {
-		return nil, FailedToLoadSystemCredentialsError
+		return nil, ErrFailedToLoadSystemCredentials
 	}
 
 	return credentials.NewTLS(

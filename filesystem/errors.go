@@ -1,5 +1,5 @@
 package filesystem
 
 var (
-	UnableToReadFileError = "unable to read file: %v"
+	ErrUnableToReadFile = "unable to read file: %v"
 )

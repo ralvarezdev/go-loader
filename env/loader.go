@@ -11,7 +11,7 @@ func LoadVariable(key string) (uri string, err error) {
 	// Get environment variable
 	variable, exists := os.LookupEnv(key)
 	if !exists {
-		return "", fmt.Errorf(EnvironmentVariableNotFoundError, key)
+		return "", fmt.Errorf(ErrEnvironmentVariableNotFound, key)
 	}
 	return variable, nil
 }
@@ -27,7 +27,7 @@ func LoadDurationVariable(key string) (duration time.Duration, err error) {
 	// Parse the duration
 	duration, err = time.ParseDuration(variable)
 	if err != nil {
-		return 0, fmt.Errorf(InvalidDurationError, key, variable)
+		return 0, fmt.Errorf(ErrInvalidDuration, key, variable)
 	}
 	return duration, nil
 }
