@@ -15,7 +15,7 @@ type Logger struct {
 func NewLogger(logger gologger.Logger) (*Logger, error) {
 	// Check if the logger is nil
 	if logger == nil {
-		return nil, gologger.NilLoggerError
+		return nil, gologger.ErrNilLogger
 	}
 
 	return &Logger{logger: logger}, nil
@@ -25,16 +25,25 @@ func NewLogger(logger gologger.Logger) (*Logger, error) {
 func (l *Logger) LoadedTokenSource(tokenSource *oauth.TokenSource) {
 	// Check if the token source is nil
 	if tokenSource == nil {
-		l.logger.LogError(gologger.NewLogError("failed to load token source", nil,
-			ErrNilTokenSource
-		))
+		l.logger.LogError(
+			gologger.NewLogError(
+				"failed to load token source", nil,
+				ErrNilTokenSource,
+			),
+		)
 		return
 	}
 
 	// Get the access token from the token source
 	token, err := tokenSource.Token()
 	if err != nil {
-		l.logger.LogError(gologger.NewLogError("failed to load token source", nil, err))
+		l.logger.LogError(
+			gologger.NewLogError(
+				"failed to load token source",
+				nil,
+				err,
+			),
+		)
 		return
 	}
 
