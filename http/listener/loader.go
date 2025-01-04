@@ -12,11 +12,16 @@ type Port struct {
 }
 
 // LoadPort load port from environment variables
-func LoadPort(host string, key string) (
+func LoadPort(loader goloaderenv.Loader, host string, key string) (
 	*Port, error,
 ) {
+	// Check if loader is nil
+	if loader == nil {
+		return nil, goloaderenv.ErrNilLoader
+	}
+
 	// Get environment variable
-	port, err := goloaderenv.LoadVariable(key)
+	port, err := loader.LoadVariable(key)
 	if err != nil {
 		return nil, err
 	}
