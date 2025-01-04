@@ -25,8 +25,7 @@ func (l *Logger) EnvironmentVariableLoaded(variablesName ...string) {
 	l.logger.LogMessage(
 		gologger.NewLogMessage(
 			"environment variable loaded",
-			gologgerstatus.StatusDebug,
-			nil,
+			gologgerstatus.Debug,
 			variablesName...,
 		),
 	)

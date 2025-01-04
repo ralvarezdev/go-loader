@@ -25,8 +25,7 @@ func (l *Logger) ServerStarted(port string) {
 	l.logger.LogMessage(
 		gologger.NewLogMessage(
 			"server started",
-			gologgerstatus.StatusDebug,
-			nil,
+			gologgerstatus.Debug,
 			port,
 		),
 	)

@@ -40,7 +40,6 @@ func (l *Logger) LoadedTokenSource(tokenSource *oauth.TokenSource) {
 		l.logger.LogError(
 			gologger.NewLogError(
 				"failed to load token source",
-				nil,
 				err,
 			),
 		)
@@ -50,8 +49,7 @@ func (l *Logger) LoadedTokenSource(tokenSource *oauth.TokenSource) {
 	l.logger.LogMessage(
 		gologger.NewLogMessage(
 			"loaded token source",
-			gologgerstatus.StatusDebug,
-			nil,
+			gologgerstatus.Debug,
 			token.AccessToken,
 		),
 	)
