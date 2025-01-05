@@ -2,31 +2,32 @@ package listener
 
 import (
 	gologger "github.com/ralvarezdev/go-logger"
-	gologgerstatus "github.com/ralvarezdev/go-logger/status"
+	gologgermode "github.com/ralvarezdev/go-logger/mode"
+	gologgermodenamed "github.com/ralvarezdev/go-logger/mode/named"
 )
 
 // Logger is the logger for the listener
 type Logger struct {
-	logger gologger.Logger
+	logger gologgermodenamed.Logger
 }
 
 // NewLogger creates a new listener logger
-func NewLogger(logger gologger.Logger) (*Logger, error) {
+func NewLogger(header string, modeLogger gologgermode.Logger) (*Logger, error) {
 	// Check if the logger is nil
-	if logger == nil {
+	if modeLogger == nil {
 		return nil, gologger.ErrNilLogger
 	}
 
-	return &Logger{logger: logger}, nil
+	// Initialize the mode named logger
+	namedLogger, _ := gologgermodenamed.NewDefaultLogger(header, modeLogger)
+
+	return &Logger{logger: namedLogger}, nil
 }
 
 // ServerStarted logs a success message when the server starts
 func (l *Logger) ServerStarted(port string) {
-	l.logger.LogMessage(
-		gologger.NewLogMessage(
-			"server started",
-			gologgerstatus.Debug,
-			port,
-		),
+	l.logger.Info(
+		"server started",
+		"port: "+port,
 	)
 }

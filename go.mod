@@ -3,7 +3,7 @@ module github.com/ralvarezdev/go-loader
 go 1.23.4
 
 require (
-	github.com/ralvarezdev/go-logger v0.3.0
+	github.com/ralvarezdev/go-logger v0.4.3
 	golang.org/x/oauth2 v0.25.0
 	google.golang.org/api v0.214.0
 	google.golang.org/grpc v1.69.2
