@@ -10,10 +10,10 @@ import (
 type (
 	// Loader interface for loading environment variables
 	Loader interface {
-		LoadVariable(key string) (uri string, err error)
-		LoadDurationVariable(key string) (duration time.Duration, err error)
-		LoadSecondsVariable(key string) (seconds float64, err error)
-		LoadIntVariable(key string) (value int, err error)
+		LoadVariable(key string, dest *string) error
+		LoadDurationVariable(key string, dest *time.Duration) error
+		LoadSecondsVariable(key string, dest *float64) error
+		LoadIntVariable(key string, dest *int) error
 	}
 
 	// DefaultLoader struct
@@ -32,59 +32,80 @@ func NewDefaultLoader(loadFn func() error) (*DefaultLoader, error) {
 }
 
 // LoadVariable load variable from environment variables
-func (d *DefaultLoader) LoadVariable(key string) (uri string, err error) {
+func (d *DefaultLoader) LoadVariable(key string, dest *string) error {
+	// Check if the destination is nil
+	if dest == nil {
+		return fmt.Errorf(ErrNilDestination, key)
+	}
+
 	// Get environment variable
 	variable, exists := os.LookupEnv(key)
 	if !exists {
-		return "", fmt.Errorf(ErrEnvironmentVariableNotFound, key)
+		return fmt.Errorf(ErrEnvironmentVariableNotFound, key)
 	}
-	return variable, nil
+	*dest = variable
+	return nil
 }
 
 // LoadDurationVariable load duration variable from environment variables
-func (d *DefaultLoader) LoadDurationVariable(key string) (
-	duration time.Duration,
-	err error,
-) {
+func (d *DefaultLoader) LoadDurationVariable(
+	key string,
+	dest *time.Duration,
+) error {
+	// Check if the destination is nil
+	if dest == nil {
+		return fmt.Errorf(ErrNilDestination, key)
+	}
+
 	// Get environment variable
-	variable, err := d.LoadVariable(key)
-	if err != nil {
-		return 0, err
+	var durationStr string
+	if err := d.LoadVariable(key, &durationStr); err != nil {
+		return err
 	}
 
 	// Parse the duration
-	duration, err = time.ParseDuration(variable)
+	duration, err := time.ParseDuration(durationStr)
 	if err != nil {
-		return 0, fmt.Errorf(ErrInvalidDuration, key, variable)
+		return fmt.Errorf(ErrInvalidDuration, key, durationStr)
 	}
-	return duration, nil
+	*dest = duration
+	return nil
 }
 
 // LoadSecondsVariable load duration variable in seconds from environment variables
-func (d *DefaultLoader) LoadSecondsVariable(key string) (
-	seconds float64,
-	err error,
-) {
-	// Get the duration
-	duration, err := d.LoadDurationVariable(key)
-	if err != nil {
-		return 0, err
+func (d *DefaultLoader) LoadSecondsVariable(key string, dest *float64) error {
+	// Check if the destination is nil
+	if dest == nil {
+		return fmt.Errorf(ErrNilDestination, key)
 	}
-	return duration.Seconds(), nil
+
+	// Get the duration
+	var duration time.Duration
+	if err := d.LoadDurationVariable(key, &duration); err != nil {
+		return err
+	}
+	*dest = duration.Seconds()
+	return nil
 }
 
 // LoadIntVariable load integer variable from environment variables
-func (d *DefaultLoader) LoadIntVariable(key string) (value int, err error) {
+func (d *DefaultLoader) LoadIntVariable(key string, dest *int) error {
+	// Check if the destination is nil
+	if dest == nil {
+		return fmt.Errorf(ErrNilDestination, key)
+	}
+
 	// Get environment variable
-	variable, err := d.LoadVariable(key)
-	if err != nil {
-		return 0, err
+	var valueStr string
+	if err := d.LoadVariable(key, &valueStr); err != nil {
+		return err
 	}
 
 	// Parse the integer
-	value, err = strconv.Atoi(variable)
+	value, err := strconv.Atoi(valueStr)
 	if err != nil {
-		return 0, fmt.Errorf(ErrInvalidInteger, key, variable)
+		return fmt.Errorf(ErrInvalidInteger, key, valueStr)
 	}
-	return value, nil
+	*dest = value
+	return nil
 }
