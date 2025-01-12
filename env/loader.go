@@ -17,18 +17,23 @@ type (
 	}
 
 	// DefaultLoader struct
-	DefaultLoader struct{}
+	DefaultLoader struct {
+		logger *Logger
+	}
 )
 
 // NewDefaultLoader creates a new default environment variable loader
-func NewDefaultLoader(loadFn func() error) (*DefaultLoader, error) {
+func NewDefaultLoader(loadFn func() error, logger *Logger) (
+	*DefaultLoader,
+	error,
+) {
 	// Execute the load function
 	if loadFn != nil {
 		if err := loadFn(); err != nil {
 			return nil, ErrFailedToLoadEnvironmentVariables
 		}
 	}
-	return &DefaultLoader{}, nil
+	return &DefaultLoader{logger: logger}, nil
 }
 
 // LoadVariable load variable from environment variables
@@ -44,6 +49,12 @@ func (d *DefaultLoader) LoadVariable(key string, dest *string) error {
 		return fmt.Errorf(ErrEnvironmentVariableNotFound, key)
 	}
 	*dest = variable
+
+	// Log the environment variable
+	if d.logger != nil {
+		d.logger.EnvironmentVariableLoaded(key)
+	}
+
 	return nil
 }
 
