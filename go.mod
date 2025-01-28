@@ -3,7 +3,7 @@ module github.com/ralvarezdev/go-loader
 go 1.23.4
 
 require (
-	github.com/ralvarezdev/go-logger v0.4.5
+	github.com/ralvarezdev/go-logger v0.4.6
 	golang.org/x/oauth2 v0.25.0
 	google.golang.org/api v0.215.0
 	google.golang.org/grpc v1.69.2
@@ -19,8 +19,8 @@ require (
 	github.com/google/s2a-go v0.1.8 // indirect
 	github.com/googleapis/enterprise-certificate-proxy v0.3.4 // indirect
 	github.com/googleapis/gax-go/v2 v2.14.1 // indirect
-	github.com/ralvarezdev/go-flags v0.3.1 // indirect
-	github.com/ralvarezdev/go-strings v0.1.0 // indirect
+	github.com/ralvarezdev/go-flags v0.3.2 // indirect
+	github.com/ralvarezdev/go-strings v0.1.7 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.54.0 // indirect
 	go.opentelemetry.io/otel v1.31.0 // indirect
 	go.opentelemetry.io/otel/metric v1.31.0 // indirect

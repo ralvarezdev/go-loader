@@ -33,7 +33,7 @@ func NewDefaultLoader(loadFn func() error, logger *Logger) (
 			return nil, ErrFailedToLoadEnvironmentVariables
 		}
 	}
-	return &DefaultLoader{logger: logger}, nil
+	return &DefaultLoader{logger}, nil
 }
 
 // LoadVariable load variable from environment variables
