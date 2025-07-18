@@ -4,7 +4,7 @@ go 1.23.4
 
 require (
 	github.com/ralvarezdev/go-logger v0.4.6
-	golang.org/x/oauth2 v0.25.0
+	golang.org/x/oauth2 v0.27.0
 	google.golang.org/api v0.215.0
 	google.golang.org/grpc v1.69.2
 )
