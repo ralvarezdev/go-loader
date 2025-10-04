@@ -71,12 +71,12 @@ func CloseFile(file *os.File) error {
 //
 // Returns:
 //
-//   - *[][]string: A pointer to a slice of string slices containing the CSV records
-//   - *[]string: A pointer to a slice of strings containing the headers (if readHeaders is true)
+//   - [][]string: A slice of string slices containing the CSV records
+//   - []string: A slice of strings containing the headers (if readHeaders is true)
 //   - error: An error if something went wrong
 func ReadCSVFile(file *os.File, readHeaders bool) (
-	*[][]string,
-	*[]string,
+	[][]string,
+	[]string,
 	error,
 ) {
 	// Check if the file is nil
@@ -111,7 +111,7 @@ func ReadCSVFile(file *os.File, readHeaders bool) (
 	}
 
 	if readHeaders {
-		return &records, &headers, nil
+		return records, headers, nil
 	}
-	return &records, nil, nil
+	return records, nil, nil
 }
