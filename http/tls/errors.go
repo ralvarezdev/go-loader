@@ -1,6 +1,8 @@
 package tls
 
-import "errors"
+import (
+	"errors"
+)
 
 var (
 	ErrFailedToAddCAPem              = errors.New("failed to add server ca's certificate")

@@ -2,28 +2,31 @@ package env
 
 import (
 	"fmt"
+	"log/slog"
 	"os"
 	"strconv"
 	"time"
 )
 
 type (
-	// Loader interface for loading environment variables
-	Loader interface {
-		LoadVariable(key string, dest *string) error
-		LoadDurationVariable(key string, dest *time.Duration) error
-		LoadSecondsVariable(key string, dest *float64) error
-		LoadIntVariable(key string, dest *int) error
-	}
-
 	// DefaultLoader struct
 	DefaultLoader struct {
-		logger *Logger
+		logger *slog.Logger
 	}
 )
 
 // NewDefaultLoader creates a new default environment variable loader
-func NewDefaultLoader(loadFn func() error, logger *Logger) (
+//
+// Parameters:
+//
+//   - loadFn: function to load the environment variables (e.g., from a file)
+//   - logger: logger instance for logging
+//
+// Returns:
+//
+//   - *DefaultLoader: instance of DefaultLoader
+//   - error: error if any occurred during loading
+func NewDefaultLoader(loadFn func() error, logger *slog.Logger) (
 	*DefaultLoader,
 	error,
 ) {
@@ -33,11 +36,25 @@ func NewDefaultLoader(loadFn func() error, logger *Logger) (
 			return nil, ErrFailedToLoadEnvironmentVariables
 		}
 	}
+
+	// Prepare the logger
+	if logger != nil {
+		logger = logger.With("component", "env_loader")
+	}
 	return &DefaultLoader{logger}, nil
 }
 
 // LoadVariable load variable from environment variables
-func (d *DefaultLoader) LoadVariable(key string, dest *string) error {
+//
+// Parameters:
+//
+//   - key: environment variable key
+//   - dest: pointer to the destination string where the value will be stored
+//
+// Returns:
+//
+//   - error: error if any occurred during loading or parsing
+func (d DefaultLoader) LoadVariable(key string, dest *string) error {
 	// Check if the destination is nil
 	if dest == nil {
 		return fmt.Errorf(ErrNilDestination, key)
@@ -51,15 +68,22 @@ func (d *DefaultLoader) LoadVariable(key string, dest *string) error {
 	*dest = variable
 
 	// Log the environment variable
-	if d.logger != nil {
-		d.logger.EnvironmentVariableLoaded(key)
-	}
+	EnvironmentVariableLoaded(d.logger, key)
 
 	return nil
 }
 
 // LoadDurationVariable load duration variable from environment variables
-func (d *DefaultLoader) LoadDurationVariable(
+//
+// Parameters:
+//
+//   - key: environment variable key
+//   - dest: pointer to the destination time.Duration where the value will be stored
+//
+// Returns:
+//
+//   - error: error if any occurred during loading or parsing
+func (d DefaultLoader) LoadDurationVariable(
 	key string,
 	dest *time.Duration,
 ) error {
@@ -84,7 +108,16 @@ func (d *DefaultLoader) LoadDurationVariable(
 }
 
 // LoadSecondsVariable load duration variable in seconds from environment variables
-func (d *DefaultLoader) LoadSecondsVariable(key string, dest *float64) error {
+//
+// Parameters:
+//
+//   - key: environment variable key
+//   - dest: pointer to the destination float64 where the value in seconds will be stored
+//
+// Returns:
+//
+//   - error: error if any occurred during loading or parsing
+func (d DefaultLoader) LoadSecondsVariable(key string, dest *float64) error {
 	// Check if the destination is nil
 	if dest == nil {
 		return fmt.Errorf(ErrNilDestination, key)
@@ -100,7 +133,16 @@ func (d *DefaultLoader) LoadSecondsVariable(key string, dest *float64) error {
 }
 
 // LoadIntVariable load integer variable from environment variables
-func (d *DefaultLoader) LoadIntVariable(key string, dest *int) error {
+//
+// Parameters:
+//
+//   - key: environment variable key
+//   - dest: pointer to the destination int where the value will be stored
+//
+// Returns:
+//
+//   - error: error if any occurred during loading or parsing
+func (d DefaultLoader) LoadIntVariable(key string, dest *int) error {
 	// Check if the destination is nil
 	if dest == nil {
 		return fmt.Errorf(ErrNilDestination, key)

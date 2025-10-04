@@ -9,6 +9,15 @@ import (
 )
 
 // LoadTLSCredentials loads the TLS credentials
+//
+// Parameters:
+//
+//   - pemServerCAPath: path to the PEM file containing the CA certificate
+//
+// Returns:
+//
+//   - credentials.TransportCredentials: the TLS credentials
+//   - error: error if any
 func LoadTLSCredentials(pemServerCAPath string) (
 	credentials.TransportCredentials, error,
 ) {
@@ -34,6 +43,11 @@ func LoadTLSCredentials(pemServerCAPath string) (
 }
 
 // LoadSystemCredentials loads the system credentials
+//
+// Returns:
+//
+//   - credentials.TransportCredentials: the TLS credentials
+//   - error: error if any
 func LoadSystemCredentials() (credentials.TransportCredentials, error) {
 	// Load the system cert pool
 	systemRoots, err := x509.SystemCertPool()

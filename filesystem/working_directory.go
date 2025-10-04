@@ -6,6 +6,11 @@ import (
 )
 
 // GetCurrentDirectory gets the current directory of the executable
+//
+// Returns:
+//
+//   - string: the current directory path
+//   - error: error if any occurred while retrieving the directory
 func GetCurrentDirectory() (string, error) {
 	execPath, err := os.Executable()
 	if err != nil {

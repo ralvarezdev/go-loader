@@ -4,7 +4,10 @@ import (
 	"errors"
 )
 
-var (
+const (
 	ErrUnableToReadFile = "unable to read file: %v"
-	ErrNilFile          = errors.New("file cannot be nil")
+)
+
+var (
+	ErrNilFile = errors.New("file cannot be nil")
 )

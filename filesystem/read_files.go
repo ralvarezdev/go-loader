@@ -7,6 +7,15 @@ import (
 )
 
 // ReadFile reads the file from the given path
+//
+// Parameters:
+//
+//   - path: The path to the file
+//
+// Returns:
+//
+//   - []byte: The content of the file
+//   - error: An error if something went wrong
 func ReadFile(path string) ([]byte, error) {
 	file, err := os.ReadFile(path)
 	if err != nil {
@@ -16,6 +25,15 @@ func ReadFile(path string) ([]byte, error) {
 }
 
 // OpenFile opens the file from the given path
+//
+// Parameters:
+//
+//   - path: The path to the file
+//
+// Returns:
+//
+//   - *os.File: The opened file
+//   - error: An error if something went wrong
 func OpenFile(path string) (*os.File, error) {
 	// Open the CSV file
 	file, err := os.Open(path)
@@ -26,6 +44,14 @@ func OpenFile(path string) (*os.File, error) {
 }
 
 // CloseFile closes the file
+//
+// Parameters:
+//
+//   - file: The file to close
+//
+// Returns:
+//
+//   - error: An error if something went wrong
 func CloseFile(file *os.File) error {
 	if file != nil {
 		err := file.Close()
@@ -37,6 +63,17 @@ func CloseFile(file *os.File) error {
 }
 
 // ReadCSVFile reads a CSV file and returns a slice of string slices
+//
+// Parameters:
+//
+//   - file: The file to read
+//   - readHeaders: Whether to read the first line as headers
+//
+// Returns:
+//
+//   - *[][]string: A pointer to a slice of string slices containing the CSV records
+//   - *[]string: A pointer to a slice of strings containing the headers (if readHeaders is true)
+//   - error: An error if something went wrong
 func ReadCSVFile(file *os.File, readHeaders bool) (
 	*[][]string,
 	*[]string,

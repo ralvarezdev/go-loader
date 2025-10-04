@@ -1,52 +1,50 @@
 package gcloud
 
 import (
-	gologgermode "github.com/ralvarezdev/go-logger/mode"
-	gologgermodenamed "github.com/ralvarezdev/go-logger/mode/named"
+	"log/slog"
+
 	"google.golang.org/grpc/credentials/oauth"
 )
 
-// Logger is the logger for Google Cloud
-type Logger struct {
-	logger gologgermodenamed.Logger
-}
-
-// NewLogger is the logger for Google Cloud
-func NewLogger(header string, modeLogger gologgermode.Logger) (*Logger, error) {
-	// Initialize the mode named logger
-	namedLogger, err := gologgermodenamed.NewDefaultLogger(header, modeLogger)
-	if err != nil {
-		return nil, err
-	}
-
-	return &Logger{logger: namedLogger}, nil
-}
-
 // FailedToLoadTokenSource logs the failed to load token source
-func (l *Logger) FailedToLoadTokenSource(err error) {
-	l.logger.Error(
-		"failed to load token source",
-		err,
-	)
+//
+// Parameters:
+//
+//   - err: the error
+//   - logger: the logger
+func FailedToLoadTokenSource(err error, logger *slog.Logger) {
+	if logger != nil {
+		logger.Error(
+			"failed to load token source",
+			slog.String("error", err.Error()),
+		)
+	}
 }
 
 // LoadedTokenSource logs the loaded token source
-func (l *Logger) LoadedTokenSource(tokenSource *oauth.TokenSource) {
+//
+// Parameters:
+//
+//   - tokenSource: the token source
+//   - logger: the logger
+func LoadedTokenSource(tokenSource *oauth.TokenSource, logger *slog.Logger) {
 	// Check if the token source is nil
 	if tokenSource == nil {
-		l.FailedToLoadTokenSource(ErrNilTokenSource)
+		FailedToLoadTokenSource(ErrNilTokenSource, logger)
 		return
 	}
 
 	// Get the access token from the token source
 	token, err := tokenSource.Token()
 	if err != nil {
-		l.FailedToLoadTokenSource(err)
+		FailedToLoadTokenSource(err, logger)
 		return
 	}
 
-	l.logger.Debug(
-		"loaded token source",
-		token.AccessToken,
-	)
+	if logger != nil {
+		logger.Debug(
+			"loaded token source",
+			slog.String("access_token", token.AccessToken),
+		)
+	}
 }
