@@ -15,7 +15,7 @@ import (
 func FailedToLoadTokenSource(err error, logger *slog.Logger) {
 	if logger != nil {
 		logger.Error(
-			"failed to load token source",
+			"Failed to load token source",
 			slog.String("error", err.Error()),
 		)
 	}
@@ -43,7 +43,7 @@ func LoadedTokenSource(tokenSource *oauth.TokenSource, logger *slog.Logger) {
 
 	if logger != nil {
 		logger.Debug(
-			"loaded token source",
+			"Loaded token source",
 			slog.String("access_token", token.AccessToken),
 		)
 	}

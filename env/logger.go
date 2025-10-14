@@ -13,7 +13,7 @@ import (
 func EnvironmentVariableLoaded(logger *slog.Logger, variablesName ...string) {
 	if logger != nil {
 		logger.Debug(
-			"environment variable loaded",
+			"Environment variable loaded",
 			slog.Any("variables", variablesName),
 		)
 	}
