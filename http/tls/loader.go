@@ -4,8 +4,9 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 
-	goloaderfs "github.com/ralvarezdev/go-loader/filesystem"
 	"google.golang.org/grpc/credentials"
+
+	goloaderfs "github.com/ralvarezdev/go-loader/filesystem"
 )
 
 // LoadTLSCredentials loads the TLS credentials
@@ -37,7 +38,8 @@ func LoadTLSCredentials(pemServerCAPath string) (
 
 	// Create the credentials and return it
 	config := &tls.Config{
-		RootCAs: certPool,
+		RootCAs:    certPool,
+		MinVersion: tls.VersionTLS13,
 	}
 	return credentials.NewTLS(config), nil
 }
@@ -57,7 +59,8 @@ func LoadSystemCredentials() (credentials.TransportCredentials, error) {
 
 	return credentials.NewTLS(
 		&tls.Config{
-			RootCAs: systemRoots,
+			RootCAs:    systemRoots,
+			MinVersion: tls.VersionTLS13,
 		},
 	), nil
 }

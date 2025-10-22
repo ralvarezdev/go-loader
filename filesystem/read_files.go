@@ -75,9 +75,9 @@ func CloseFile(file *os.File) error {
 //   - []string: A slice of strings containing the headers (if readHeaders is true)
 //   - error: An error if something went wrong
 func ReadCSVFile(file *os.File, readHeaders bool) (
-	[][]string,
-	[]string,
-	error,
+	records [][]string,
+	headers []string,
+	err error,
 ) {
 	// Check if the file is nil
 	if file == nil {
@@ -86,8 +86,8 @@ func ReadCSVFile(file *os.File, readHeaders bool) (
 
 	// Defer closing the file
 	defer func(file *os.File) {
-		if err := CloseFile(file); err != nil {
-			fmt.Println(err)
+		if closeErr := CloseFile(file); closeErr != nil {
+			fmt.Println(closeErr)
 		}
 	}(file)
 
@@ -95,8 +95,6 @@ func ReadCSVFile(file *os.File, readHeaders bool) (
 	reader := csv.NewReader(file)
 
 	// Read the header line
-	var headers []string
-	var err error
 	if readHeaders {
 		headers, err = reader.Read()
 		if err != nil {
@@ -105,7 +103,7 @@ func ReadCSVFile(file *os.File, readHeaders bool) (
 	}
 
 	// Read all records from the CSV file
-	records, err := reader.ReadAll()
+	records, err = reader.ReadAll()
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to read CSV file: %w", err)
 	}
